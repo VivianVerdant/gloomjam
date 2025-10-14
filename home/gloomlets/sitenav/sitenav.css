@@ -1,0 +1,17 @@
+gloomlet[name="sitenav"] {
+	font-family: "Gabriela", serif;
+
+	& > layout {
+		background-color: var(--sitenav-background-color);
+	}
+
+	& a {
+		font-size: 1.3rem;
+	}
+
+	/* separator */
+	& a:not(:last-child)::after {
+		content: var(--menu-separator-character, "|");
+		padding: 0 10px;
+	}
+}

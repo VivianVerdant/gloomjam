@@ -1,0 +1,297 @@
+gloomlet[name="reader"] {
+	/*.reader_content {
+		display: grid;
+		grid-template-columns: 0.5fr min-content 0.5fr;
+		grid-template-rows: repeat(6, min-content);
+		grid-auto-rows: 1fr;
+		gap: 0px 0px;
+		grid-auto-flow: row;
+		grid-template-areas:
+			"above_page above_page above_page"
+			"comicpage comicpage comicpage"
+			". comicpage_nav_bottom ."
+			"author_notes author_notes author_notes"
+			"comments comments comments";
+	}*/
+
+	.above_page {
+		/*display: grid;
+		grid-area: above_page;*/
+		justify-content: center;
+	}
+
+	/*	.page_info_wrapper {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		max-width: 800px;
+	}*/
+
+	.page_container {
+		/*display: grid;
+		grid-area: comicpage;*/
+		justify-self: center;
+		grid-auto-columns: 1fr;
+		place-items: anchor-center;
+		max-width: min-content;
+		z-index: 0;
+	}
+
+	.comicpage {
+		display: grid;
+		justify-self: center;
+		grid-auto-columns: 1fr;
+		grid-template-areas: "comic_img";
+	}
+
+	.comicpage img {
+		grid-area: comic_img;
+	}
+
+	.reader_help {
+		/*display: grid;
+		grid-area: comic_img;*/
+		justify-self: center;
+	}
+
+	.reader_settings {
+		align-content: flex-end;
+
+		.scale_selector,
+		.help_button {
+			float: inline-end;
+		}
+	}
+
+	.comicpage_info {
+		align-content: flex-end;
+
+		.comicpage_info_wrapper {
+			float: inline-start;
+		}
+	}
+
+	/*.comicpage_nav_bottom {
+		grid-area: comicpage_nav_bottom;
+	}*/
+
+	/*.author_notes {
+		grid-area: author_notes;
+		justify-self: center;
+	}*/
+
+	/*.comments {
+		grid-area: comments;
+		justify-self: center;
+	}*/
+
+	/* style nav button images */
+	.comicpage_nav {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: center;
+		padding: 10px 0px;
+		margin: 0 auto;
+	}
+
+	.nav_button {
+		padding: 0 10px;
+		cursor: pointer;
+	}
+
+	.nav_button img {
+		width: 50px;
+	}
+
+	.nav_button.hide_nav img {
+		opacity: 0;
+		height: 0;
+	}
+
+	.nav_button.nav_last img,
+	.nav_button.nav_next img {
+		-webkit-transform: scaleX(-1);
+		transform: scaleX(-1);
+	}
+
+	/* style comic page image */
+	/*
+	.comicpage_info_wrapper,
+	.scale_selector {
+		color: var(--background-color);
+		font-size: 18px;
+		padding: 8px;
+
+		background-color: var(--sitenav-background-color);
+		border-color: var(--text-link-color);
+		border-width: 1px;
+		border-style: solid;
+	}
+*/
+	.help_button,
+	.scale_selector {
+		transition: all 0.5s ease;
+		width: fit-content;
+		padding-bottom: 2px;
+		padding-left: 4px;
+		padding-right: 4px;
+	}
+
+	.reader_settings.hide_dropdown > dropdown {
+		display: none;
+	}
+
+	.reader_settings dropdown {
+		position: absolute;
+		right: var(--scrollbar-width);
+		margin: 12px;
+		padding: 4px;
+		line-height: 24px;
+		z-index: 1;
+		width: fit-content;
+
+		ul {
+			padding-inline-start: 14px;
+			margin-block-start: 0;
+			margin-block-end: 0;
+		}
+	}
+	/*
+	.reader_settings.hide_dropdown > div::after {
+		font-size: 12px;
+		transform: translateY(2px);
+
+		padding-left: 4px;
+		content: "◀";
+	}
+
+	.reader_settings:not(.hide_dropdown) > div::after {
+		font-size: 12px;
+		transform: translateY(2px);
+		padding-left: 4px;
+		content: "▼";
+	}
+*/
+	#comicpage {
+		max-width: calc(100vw - var(--scrollbar-width) - 12px);
+		width: min-content;
+		overflow-x: auto;
+		text-align: center;
+	}
+
+	.page_img {
+		place-self: center;
+	}
+
+	.colorize_page {
+		mix-blend-mode: luminosity;
+	}
+
+	#comicpage img {
+		width: auto;
+		height: auto;
+	}
+
+	/*	#comicpage img::after {
+		content: url(/img/reader_help.png);
+	}*/
+
+	#comicpage.fit_width img {
+		width: calc(100vw - var(--scrollbar-width) - 12px);
+		height: auto;
+	}
+
+	#comicpage.fit_original,
+	#comicpage.fit_height {
+		overflow-x: auto;
+	}
+
+	#comicpage.fit_height img {
+		height: calc(100vh - var(--scrollbar-width));
+		width: auto;
+	}
+
+	#comicpage.fit_both img {
+		max-width: calc(100vw - var(--scrollbar-width) - 12px);
+		max-height: 100vh;
+		width: auto;
+		height: auto;
+	}
+
+	#comicpage.fit_original img {
+		width: unset;
+		height: unset;
+	}
+
+	.text_description_toggle {
+		width: fit-content;
+		margin-left: auto;
+		padding: 4px;
+		padding-top: 20px;
+		margin-top: -20px;
+		margin-right: 40px;
+		position: relative;
+		z-index: -5;
+	}
+
+	.text_description {
+		position: relative;
+		z-index: -10;
+		padding: 0.5rem;
+		padding-top: 40px;
+		margin: 0 20px;
+		margin-top: -140px;
+		margin-bottom: 40px;
+		grid-template-rows: 0fr;
+		display: grid;
+		transition: margin-top 0.5s ease-in-out,
+			grid-template-rows 0.5s ease-in-out, margin-bottom 0.5s ease-in-out;
+
+		& > div {
+			overflow: hidden;
+		}
+	}
+
+	.text_description.open {
+		margin-top: -40px;
+		grid-template-rows: 1fr;
+		margin-bottom: 0px;
+	}
+
+	.author_notes {
+		max-width: 800px;
+
+		.text {
+			float: inline-start;
+			padding: 0 1em;
+		}
+
+		img {
+			height: 200px;
+			width: auto;
+			float: inline-end;
+		}
+	}
+
+	/*DISQUS COMMENT SECTION*/
+
+	.comments {
+		text-align: center;
+		margin-top: 20px;
+		/*max-width: 800px;*/
+		/*min-width: 400px;*/
+		min-height: 525px;
+		padding: 10px 20px;
+		align-self: center;
+		width: -webkit-fill-available;
+		width: -moz-available;
+	}
+
+	#reactions * {
+		padding: 0;
+	}
+
+	#reactions__container .text-bold {
+		display: none;
+	}
+}

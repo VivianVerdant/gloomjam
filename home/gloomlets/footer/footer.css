@@ -1,0 +1,96 @@
+gloomlet[name="footer"] {
+	margin-top: auto;
+
+	& h2 {
+		margin: 0;
+		font-size: 1.3rem;
+		padding-bottom: 16px;
+	}
+
+	& .footer {
+		color: var(--text-link-color);
+		background-color: var(--sitenav-background-color);
+		align-items: center;
+	}
+
+	& .links {
+		display: flex;
+		flex-direction: column;
+		justify-self: center;
+		text-align: center;
+
+		& > div {
+			width: min-content;
+			place-self: center;
+		}
+
+		& a {
+			padding: 0 2px;
+			width: min-content;
+		}
+
+		& a::before {
+			content: "•";
+			padding: 0 2px;
+		}
+	}
+
+	.links,
+	.newsletter {
+		/*padding: 0 40px;*/
+		padding-top: 20px;
+	}
+
+	.newsletter .email {
+		max-width: 73vw;
+	}
+
+	& .legal {
+		background-color: var(--sitenav-background-color);
+		padding: 4px;
+		margin-top: 32px;
+
+		& > * {
+			justify-content: space-between;
+		}
+
+		& div {
+			display: flex;
+			align-items: center;
+		}
+
+		& span {
+			color: var(--background-color);
+		}
+	}
+
+	& .about_template {
+		cursor: pointer;
+
+		& img {
+			height: 26px;
+			padding: 4px;
+			width: auto;
+		}
+	}
+
+	& .copyright {
+		text-align-last: right;
+	}
+
+	/* Mailchimp */
+
+	& #mc_embed_signup form {
+		text-align: center;
+	}
+	& #mc-embedded-subscribe {
+		justify-self: flex-end;
+		cursor: pointer;
+	}
+
+	/*
+	& mailchimp .refferal_badge {
+		height: 20px;
+		margin: 6px;
+	}*/
+}
