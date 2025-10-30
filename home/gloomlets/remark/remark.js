@@ -25,7 +25,7 @@ class Remark {
 
 const remark = new Remark();
 gloomlet_scripts.push(remark);
-
+/*
 var MutationObserver =
 	window.MutationObserver ||
 	window.WebKitMutationObserver ||
@@ -77,3 +77,4 @@ var observerConfig = {
 
 var targetNode = document.getElementById("remark42");
 observer.observe(targetNode, observerConfig);
+*/
