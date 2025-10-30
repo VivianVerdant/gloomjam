@@ -379,7 +379,6 @@ class Reader {
 	}
 
 	update_url() {
-		return;
 		const new_url = new URL(window.location.origin);
 		new_url.searchParams.set("page", this.current_page.identifier);
 		window.history.pushState(null, "", new_url.toString());
