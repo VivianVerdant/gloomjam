@@ -13,27 +13,27 @@ class Gj_i18n {
 		localStorage.language = lang;
 		const new_data = await this._load_language_data("gj_i18n", localStorage.language);
 		if (new_data) {
-			console.log("found new data ", new_data);
+			//console.log("found new data ", new_data);
 			this._merge(lang_db, new_data);
-			console.log(JSON.stringify(lang_db));
+			//console.log(JSON.stringify(lang_db));
 		}
 		for (const name of gloomlet_names) {
 			const path = `gloomlets/${name}`;
 			const new_data = await this._load_language_data(path, localStorage.language);
 			if (new_data) {
-				console.log("found new data ", new_data);
+				//console.log("found new data ", new_data);
 				this._merge(lang_db, new_data);
-				console.log(JSON.stringify(lang_db));
+				//console.log(JSON.stringify(lang_db));
 			}
 		}
-		console.log(lang_db);
+		//console.log(lang_db);
 		this.update_content();
 	}
 
 	async update_content(name) {
 		const root = name ? document.querySelector(`gloomlet[name=${name}]`) :  document;
 
-		console.log("updating language data for root: ", root);
+		//console.log("updating language data for root: ", root);
 	
 		root.querySelectorAll("[data-i18n]").forEach((element) => {
 			const key = element.getAttribute("data-i18n");
@@ -53,16 +53,16 @@ class Gj_i18n {
 					element.innerHTML = lang_db[localStorage.language][key];
 				}
 			} catch (e) {
-				console.log(`No translation found for ${key}`);
+				//console.log(`No translation found for ${key}`);
 			}
 		});
 
 		root.querySelectorAll("[language]").forEach((element) => {
 			if (element.getAttribute("language") == localStorage.language) {
-				console.log("showing ", element);
+				//console.log("showing ", element);
 				element.classList.remove("hidden");
 			} else {
-				console.log("hiding ", element);
+				//console.log("hiding ", element);
 				element.classList.add("hidden");
 			}
 		});
@@ -82,7 +82,7 @@ class Gj_i18n {
 
 	// Function to fetch language data
 	async _load_language_data(root, lang) {
-		console.log("loading", lang, "for", root);
+		//console.log("loading", lang, "for", root);
 		try {
 			const response = await fetch(`/${root}/${lang}.json`).then(response => response.json());
 			const lang_obj = new Object();
@@ -91,7 +91,7 @@ class Gj_i18n {
 			});
 			return lang_obj;
 		} catch (e) {
-			console.error(e);
+			//console.error(e);
 			return false;
 		}
 	}
@@ -100,10 +100,10 @@ class Gj_i18n {
 		const path = `gloomlets/${name}`;
 		const new_data = await this._load_language_data(path, localStorage.language);
 		if (new_data) {
-			console.log("found new data ", new_data);
+			//console.log("found new data ", new_data);
 			this._merge(lang_db, new_data);
 		}
-		console.log(JSON.stringify(lang_db));
+		//console.log(JSON.stringify(lang_db));
 		this.update_content(name);
 	}
 

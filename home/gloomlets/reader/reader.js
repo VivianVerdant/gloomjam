@@ -75,18 +75,10 @@ class Reader {
 						break;
 					case "colorize_page":
 						if (localStorage.colorize_page == 1) {
-							console.log(
-								"colorize on",
-								localStorage.colorize_page
-							);
 							document
 								.querySelector(".page_container")
 								.classList.add("colorize_page");
 						} else {
-							console.log(
-								"colorize off",
-								localStorage.colorize_page
-							);
 							document
 								.querySelector(".page_container")
 								.classList.remove("colorize_page");
@@ -202,7 +194,7 @@ class Reader {
 		var rect = document
 			.querySelector(".scale_selector")
 			.getBoundingClientRect();
-		console.log(rect);
+		//console.log(rect);
 		const dropdown = document.querySelector(".reader_settings dropdown");
 		dropdown.style.top = `${rect.bottom}px`;
 		dropdown.style.left = `${rect.left}px`;
@@ -245,9 +237,9 @@ class Reader {
 	}
 
 	toggle_page_colorize() {
-		console.log("colorize before", localStorage.colorize_page);
+		//console.log("colorize before", localStorage.colorize_page);
 		localStorage.colorize_page ^= true;
-		console.log("colorize after", localStorage.colorize_page);
+		//console.log("colorize after", localStorage.colorize_page);
 		if (localStorage.colorize_page == 1) {
 			document
 				.querySelector(".page_container")
@@ -381,7 +373,7 @@ class Reader {
 
 	nav_to_last_page() {
 		this.nav_to_page_number(this.max_page_number).then(() => {
-			console.log("foo");
+			//console.log("foo");
 			localStorage.latest_read_page = this.current_page.identifier;
 		});
 	}
