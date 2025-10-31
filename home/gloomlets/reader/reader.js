@@ -122,6 +122,11 @@ class Reader {
 		this.current_page = page_obj;
 		window.current_page = page_obj;
 		this._write_page();
+		for (const script of gloomlet_scripts.values()) {
+			try {
+				script.update_page();
+			} catch (e) {}
+		}
 	}
 
 	//function used to write comic page to web page
@@ -138,7 +143,10 @@ class Reader {
 		author_notes.innerHTML =
 			this.current_page[localStorage.language].comment;
 		const comment_image = document.getElementById("comment_image");
-		if (this.current_page[localStorage.language].comment == "" && this.current_page.comment_image == "") {
+		if (
+			this.current_page[localStorage.language].comment == "" &&
+			this.current_page.comment_image == ""
+		) {
 			document.querySelector(".author_notes").classList.add("hidden");
 		} else {
 			document.querySelector(".author_notes").classList.remove("hidden");

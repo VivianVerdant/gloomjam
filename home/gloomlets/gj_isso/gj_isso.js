@@ -1,4 +1,4 @@
-class Isso {
+class Gj_isso {
 	constructor() {
 		var script = document.createElement("script");
 		script.setAttribute("foo", "bar");
@@ -12,5 +12,5 @@ class Isso {
 	}
 }
 
-const isso = new Isso();
-gloomlet_scripts.push(isso);
+const gj_isso = new Gj_isso();
+gloomlet_scripts.push(gj_isso);

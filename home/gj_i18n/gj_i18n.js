@@ -4,14 +4,14 @@ localStorage.language =
 
 var lang_db = {};
 
-class I18n {
+class Gj_i18n {
 	constructor() {
 		this.set_language(localStorage.language);
 	}
 
 	async set_language(lang) {
 		localStorage.language = lang;
-		const new_data = await this._load_language_data("i18n", localStorage.language);
+		const new_data = await this._load_language_data("gj_i18n", localStorage.language);
 		if (new_data) {
 			console.log("found new data ", new_data);
 			this._merge(lang_db, new_data);
@@ -112,4 +112,4 @@ class I18n {
 	}
 }
 
-const i18n = new I18n();
+const gj_i18n = new Gj_i18n();

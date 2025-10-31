@@ -130,7 +130,7 @@ wait_for_element("gloomlet", async (element) => {
 					element.innerHTML = text;
 					console.log("loaded HTML for: ", name);
 					js();
-					i18n.load_gloomlet(name);
+					gj_i18n.load_gloomlet(name);
 				});
 		};
 		const css = async () => {
