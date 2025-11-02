@@ -13,10 +13,10 @@ class Remark {
 		};
 		window.remark_config.locale = localStorage.language;
 		if (window.current_page) {
-			window.remark_config.url = window.current_page.identifier;
+			window.remark_config.url = window.location.href;
 		} else {
 			setTimeout(() => {
-				window.remark_config.url = window.current_page.identifier;
+				window.remark_config.url = window.location.href;
 				this.update_page();
 			}, 200);
 		}

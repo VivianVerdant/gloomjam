@@ -79,6 +79,33 @@ async function get_page(identifier) {
 	return page_obj;
 }
 
+async function get_page_by_number(number) {
+	let page_obj;
+	let identifier;
+	if (number <= window.page_list.length && number > 0) {
+		identifier = window.page_list[number - 1];
+	} else {
+		identifier = window.page_list[-1];
+	}
+	//console.log("attempting to get page: ", identifier);
+	try {
+		page_obj = await fetch(`comic/${identifier}/page.json`);
+		page_obj = await page_obj.json();
+	} catch (e) {
+		console.error(
+			`page ${identifier} does not exist, attempting to load latest page instead`
+		);
+		identifier = page_list[page_list.length - 1];
+		page_obj = await fetch(`comic/${identifier}/page.json`);
+		page_obj = await page_obj.json();
+	}
+	//console.log("got a page, adding extra variables");
+	page_obj["identifier"] = identifier;
+	page_obj["number"] = page_list.indexOf(identifier) + 1;
+	//console.log(page_obj);
+	return page_obj;
+}
+
 let animation_counter = 0;
 
 function wait_for_element(selector, func) {

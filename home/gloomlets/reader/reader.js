@@ -49,7 +49,7 @@ class Reader {
 			for (const [key, value] of query.entries()) {
 				switch (key) {
 					case "page":
-						const page_obj = await get_page(value);
+						const page_obj = await get_page_by_number(value);
 						this.set_current_page(page_obj);
 						break;
 					default:
@@ -380,7 +380,7 @@ class Reader {
 
 	update_url() {
 		const new_url = new URL(window.location.origin);
-		new_url.searchParams.set("page", this.current_page.identifier);
+		new_url.searchParams.set("page", this.current_page.number);
 		window.history.pushState(null, "", new_url.toString());
 	}
 
