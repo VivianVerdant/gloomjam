@@ -79,6 +79,33 @@ async function get_page(identifier) {
 	return page_obj;
 }
 
+async function get_page_by_number(number) {
+	let page_obj;
+	let identifier;
+	if (number <= window.page_list.length && number > 0) {
+		identifier = window.page_list[number - 1];
+	} else {
+		identifier = window.page_list[-1];
+	}
+	//console.log("attempting to get page: ", identifier);
+	try {
+		page_obj = await fetch(`comic/${identifier}/page.json`);
+		page_obj = await page_obj.json();
+	} catch (e) {
+		console.error(
+			`page ${identifier} does not exist, attempting to load latest page instead`
+		);
+		identifier = page_list[page_list.length - 1];
+		page_obj = await fetch(`comic/${identifier}/page.json`);
+		page_obj = await page_obj.json();
+	}
+	//console.log("got a page, adding extra variables");
+	page_obj["identifier"] = identifier;
+	page_obj["number"] = page_list.indexOf(identifier) + 1;
+	//console.log(page_obj);
+	return page_obj;
+}
+
 let animation_counter = 0;
 
 function wait_for_element(selector, func) {
@@ -115,22 +142,22 @@ function wait_for_element(selector, func) {
 wait_for_element("gloomlet", async (element) => {
 	if (element.getAttribute("name")) {
 		const name = element.getAttribute("name");
-		console.log("loading content for gloomlet", name, "at", element);
+		//console.log("loading content for gloomlet", name, "at", element);
 		gloomlet_names.push(name);
 		const js = async () => {
 			var script = document.createElement("script");
 			script.src = `gloomlets/${name}/${name}.js`;
 			document.body.appendChild(script);
-			console.log(`loaded JS for: ${name}`);
+			//console.log(`loaded JS for: ${name}`);
 		};
 		const html = async () => {
 			fetch(`gloomlets/${name}/${name}.html`)
 				.then((response) => response.text())
 				.then((text) => {
 					element.innerHTML = text;
-					console.log("loaded HTML for: ", name);
+					//console.log("loaded HTML for: ", name);
 					js();
-					i18n.load_gloomlet(name);
+					gj_i18n.load_gloomlet(name);
 				});
 		};
 		const css = async () => {
@@ -141,7 +168,7 @@ wait_for_element("gloomlet", async (element) => {
 				linktag.setAttribute("type", "text/css");
 				linktag.setAttribute("media", "all");
 				document.head.appendChild(linktag);
-				console.log("loaded CSS for: ", name);
+				//console.log("loaded CSS for: ", name);
 				html();
 			});
 		};

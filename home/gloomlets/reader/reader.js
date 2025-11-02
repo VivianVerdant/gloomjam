@@ -49,7 +49,7 @@ class Reader {
 			for (const [key, value] of query.entries()) {
 				switch (key) {
 					case "page":
-						const page_obj = await get_page(value);
+						const page_obj = await get_page_by_number(value);
 						this.set_current_page(page_obj);
 						break;
 					default:
@@ -75,18 +75,10 @@ class Reader {
 						break;
 					case "colorize_page":
 						if (localStorage.colorize_page == 1) {
-							console.log(
-								"colorize on",
-								localStorage.colorize_page
-							);
 							document
 								.querySelector(".page_container")
 								.classList.add("colorize_page");
 						} else {
-							console.log(
-								"colorize off",
-								localStorage.colorize_page
-							);
 							document
 								.querySelector(".page_container")
 								.classList.remove("colorize_page");
@@ -122,6 +114,11 @@ class Reader {
 		this.current_page = page_obj;
 		window.current_page = page_obj;
 		this._write_page();
+		for (const script of gloomlet_scripts.values()) {
+			try {
+				script.update_page();
+			} catch (e) {}
+		}
 	}
 
 	//function used to write comic page to web page
@@ -138,7 +135,10 @@ class Reader {
 		author_notes.innerHTML =
 			this.current_page[localStorage.language].comment;
 		const comment_image = document.getElementById("comment_image");
-		if (this.current_page[localStorage.language].comment == "" && this.current_page.comment_image == "") {
+		if (
+			this.current_page[localStorage.language].comment == "" &&
+			this.current_page.comment_image == ""
+		) {
 			document.querySelector(".author_notes").classList.add("hidden");
 		} else {
 			document.querySelector(".author_notes").classList.remove("hidden");
@@ -194,7 +194,7 @@ class Reader {
 		var rect = document
 			.querySelector(".scale_selector")
 			.getBoundingClientRect();
-		console.log(rect);
+		//console.log(rect);
 		const dropdown = document.querySelector(".reader_settings dropdown");
 		dropdown.style.top = `${rect.bottom}px`;
 		dropdown.style.left = `${rect.left}px`;
@@ -237,9 +237,9 @@ class Reader {
 	}
 
 	toggle_page_colorize() {
-		console.log("colorize before", localStorage.colorize_page);
+		//console.log("colorize before", localStorage.colorize_page);
 		localStorage.colorize_page ^= true;
-		console.log("colorize after", localStorage.colorize_page);
+		//console.log("colorize after", localStorage.colorize_page);
 		if (localStorage.colorize_page == 1) {
 			document
 				.querySelector(".page_container")
@@ -373,15 +373,14 @@ class Reader {
 
 	nav_to_last_page() {
 		this.nav_to_page_number(this.max_page_number).then(() => {
-			console.log("foo");
+			//console.log("foo");
 			localStorage.latest_read_page = this.current_page.identifier;
 		});
 	}
 
 	update_url() {
-		return;
 		const new_url = new URL(window.location.origin);
-		new_url.searchParams.set("page", this.current_page.identifier);
+		new_url.searchParams.set("page", this.current_page.number);
 		window.history.pushState(null, "", new_url.toString());
 	}
 
