@@ -45,7 +45,7 @@ class Remark {
 
 	update_page() {
 		window.REMARK42.destroy();
-		window.remark_config.url = window.current_page.identifier;
+		window.remark_config.url = window.location.href;
 		window.REMARK42.createInstance(window.remark_config);
 	}
 }
