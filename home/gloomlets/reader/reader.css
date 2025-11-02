@@ -27,8 +27,7 @@ gloomlet[name="reader"] {
 	}*/
 
 	.page_container {
-		/*display: grid;
-		grid-area: comicpage;*/
+		display: block;
 		justify-self: center;
 		grid-auto-columns: 1fr;
 		place-items: anchor-center;
@@ -143,7 +142,7 @@ gloomlet[name="reader"] {
 	}
 
 	.reader_settings dropdown {
-		position: absolute;
+		position: fixed;
 		right: var(--scrollbar-width);
 		margin: 12px;
 		padding: 4px;
@@ -175,7 +174,7 @@ gloomlet[name="reader"] {
 */
 	#comicpage {
 		max-width: calc(100vw - var(--scrollbar-width) - 12px);
-		width: 100%;
+		/*width: 100%;*/
 		overflow-x: auto;
 		text-align: center;
 	}
