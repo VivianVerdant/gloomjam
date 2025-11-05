@@ -38,19 +38,19 @@ class Archive {
 			let pages_html = "";
 			for (const page of pages) {
 				const page_obj = await get_page(page);
-				let html = `<a class="page" href="/index.html?page=${page}">
+				let html = `<a class="page" href="/index.html?page=${page_obj.number}">
 					<div>
 						<img src="/comic/${page}/${page_obj.thumbnail}" class="thumbnail" />
 					</div>
 					<div class="page_info">
 					<h3>${page_obj[localStorage.language].title}</h3>
-					<span>${page_obj.publication_date}</span>
+					<!--- <span>${page_obj.publication_date}</span> --->
 					</div>
 				</a>
 				`;
 				pages_html = pages_html.concat(html);
 			}
-			let chapter_html = `<div class="chapter expandable">
+			let chapter_html = `<div class="chapter expandable open">
 			<h2 class="ninepatch_title">${name}</h2>
 			<div class="page_collapse ninepatch_paper_2">
 			<div class="page_list">

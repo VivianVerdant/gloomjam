@@ -13,7 +13,6 @@ gloomlet[name="archive"] {
 		height: fit-content;
 		padding-top: 10px;
 		transform: translateY(-20px);
-		z-index: -1;
 	}
 	/*
 	.expandable.open > .page_list {
@@ -44,6 +43,7 @@ gloomlet[name="archive"] {
 			justify-content: center;
 			flex-direction: row;
 			align-items: center;
+			z-index: 5;
 
 			&::before {
 				content: url(/gloomlets/archive/wax_seal.svg);
@@ -59,7 +59,6 @@ gloomlet[name="archive"] {
 		grid-template-rows: 0fr;
 		transition: grid-template-rows .5s ease-in-out;
         transform: translateY(-20px);
-        z-index: -1;
 	}
 	
 	.page_collapse.open {
@@ -72,9 +71,9 @@ gloomlet[name="archive"] {
 		display: grid;
 		padding-top: 20px;
 		grid-auto-rows: 1fr;
-		background-image: url(/gloomlets/archive/ribbon.png);
+		/*background-image: url(/gloomlets/archive/ribbon.png);
 		background-repeat: repeat-y;
-		background-position: 34px;
+		background-position: 34px;*/
 	}
 	
 	.page {
@@ -97,6 +96,7 @@ gloomlet[name="archive"] {
 			transform: translateZ(-10px);
 			width: auto;
 			height: 68px;
+			border: 1px solid var(--text-emphasis-color);
 		}
 
 		.page_info {
