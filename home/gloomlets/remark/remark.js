@@ -1,8 +1,8 @@
 class Remark {
 	constructor() {
 		window.remark_config = {
-			host: "https://remark.trashbird.gay",
-			site_id: "Domak",
+			host: "https://remark.example.com",
+			site_id: "Gloomjam",
 			name: "comments",
 			components: ["embed", "last-comments"],
 			max_shown_comments: 20,
