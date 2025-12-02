@@ -19,18 +19,23 @@ gloomlet[name="archive"] {
 		height: fit-content;
 	}
 */
+
 	h1,
 	h2,
 	.chapter,
-	.title {
+	.expand_collapse_all {
 		justify-self: center;
 		margin-block-start: 0;
 		margin-block-end: 16px;
+	}
+
+	.expand_collapse_all {
 		cursor: pointer;
 	}
 
 	.title {
-		margin-block-start: 16px;
+		margin-block-start: 1.5rem;
+		margin-block-end: 2rem;
 	}
 
 	.chapter {
@@ -44,6 +49,7 @@ gloomlet[name="archive"] {
 			flex-direction: row;
 			align-items: center;
 			z-index: 5;
+			cursor: pointer;
 
 			&::before {
 				content: url(/gloomlets/archive/wax_seal.svg);

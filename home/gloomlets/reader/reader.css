@@ -129,6 +129,12 @@ gloomlet[name="reader"] {
 	}
 */
 	.help_button,
+	.scale_selector,
+	.reader_settings li {
+		cursor: pointer;
+	}
+
+	.help_button,
 	.scale_selector {
 		transition: all 0.5s ease;
 		width: fit-content;

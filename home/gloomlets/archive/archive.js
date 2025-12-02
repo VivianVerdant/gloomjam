@@ -56,6 +56,20 @@ class Archive {
 		document.getElementById("archive_content").innerHTML = archive_html;
 		document.querySelector(".chapter:last-of-type .page_collapse").click();
 	}
+
+	expand_collapse_all() {
+		const current_state = document.querySelector(".chapter:first-of-type .page_collapse").classList.contains("open");
+		const chapter_elements = document.querySelectorAll(".chapter .page_collapse");
+		if (current_state) {
+			for (const el of chapter_elements) {
+				el.classList.remove("open")	
+			}
+		} else {
+			for (const el of chapter_elements) {
+				el.classList.add("open")	
+			}
+		}
+	}
 }
 
 const archive = new Archive();
