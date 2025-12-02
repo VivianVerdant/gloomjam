@@ -28,83 +28,172 @@ window.addEventListener("load", function () {
 	});
 });
 
-// functions for loading the database and fetching pages
+// Classes for loading in comic data
 
-var db;
-var page_list = [];
-var chapter_list = [];
-
-async function load_db() {
-	try {
-		const response = await fetch("comic/db.json", {}); // type: Promise<Response>
-		db = JSON.parse(await response.text());
-		for (const chapter of Object.keys(db.published)) {
-			//console.log(chapter);
-			const pages = db.published[chapter].pages;
-			//console.log(pages);
-			for (const page of pages) {
-				//console.log(page);
-				page_list.push(page);
-				chapter_list.push(chapter);
+class ComicDB {
+	chapters = [];
+	pages = [];
+	initialized = false;
+	
+	constructor() {
+	}
+	
+	async init_database() {
+		try {
+			let response = await fetch("comic/chapters.json", {});
+			response = JSON.parse(await response.text());
+			const chapters = response.chapters;
+			for (const chap_id of chapters) {
+				const chap = new Chapter(chap_id);
+				await chap.init_chapter(this.pages);
+				this.chapters.push(chap);
+				this.pages = this.pages.concat(chap.pages);
+			}
+			this.initialized = true;
+			console.debug("Database loaded successfully");
+			return true;
+		} catch (e) {
+			console.debug("Failed to load database");
+			console.error(e);
+			return false;
+		}
+	}
+	
+	async get_page_by_number(page_num) {
+		let page = this.pages[this.pages.length - 1];
+		if (page_num > 0 && page_num <= this.pages.length) {
+			page = this.pages[page_num - 1]
+		}
+		if (!page.initialized) {
+			await page.init_page();
+		}
+		return page
+	}
+	
+	async get_page_by_id(page_id) {
+		let page = this.pages[this.pages.length - 1];
+		for (const pg of this.pages) {
+			if (pg.id == page_id) {
+				page = pg;
 			}
 		}
-		max_page_number = page_list.length;
-		//console.log("max page number: ", max_page_number);
-		return true;
-	} catch (e) {
-		console.error(e);
-		//console.log("Failed to load main database, abort loading page");
-		return false;
+		if (!page.initialized) {
+			await page.init_page();
+		}
+		return page
+	}
+
+	async get_chapter_by_id(ch_id){
+		let chap = false;
+		for (const ch of this.chapters) {
+			if (ch.id == ch_id) {
+				chap = ch;
+			}
+		}
+		return chap
+	}
+
+}
+
+class Chapter {
+	id;
+	title;
+	pages = [];
+	page_range = [];
+	length;
+	
+	constructor(chap_id) {
+		this.id = chap_id;
+	}
+	
+	async init_chapter(db_pages) {
+		try {
+			console.debug(`Attempting to load chapter ${this.id}`);
+			let response = await fetch(`comic/${this.id}/chapter.json`, {});
+			response = JSON.parse(await response.text());
+			this.title = response.title;
+			this.page_range[0] = db_pages.length + 1;
+			this.page_range[1] = this.page_range[0];
+			for (const page_id of response.pages) {
+				const pg = new Page(page_id, this.page_range[1], this.id);
+				this.page_range[1] += 1;
+				this.pages.push(pg);
+			}
+			this.page_range[1] -= 1;
+			this.length = this.page_range[1] - this.page_range[0] + 1;
+			console.debug(`Successfully loaded chapter ${this.id}`);
+			return true;
+		} catch (e) {
+			console.debug(`Failed to load chapter ${this.id}`);
+			console.error(e);
+			return false;
+		}
 	}
 }
 
-async function get_page(identifier) {
-	let page_obj;
-	//console.log("attempting to get page: ", identifier);
-	try {
-		page_obj = await fetch(`comic/${identifier}/page.json`);
-		page_obj = await page_obj.json();
-	} catch (e) {
-		console.error(
-			`page ${identifier} does not exist, attempting to load latest page instead`
-		);
-		identifier = page_list[page_list.length - 1];
-		page_obj = await fetch(`comic/${identifier}/page.json`);
-		page_obj = await page_obj.json();
+class Page {
+	id;
+	chapter;
+	number;
+	languages;
+	initialized = false;
+	
+	constructor(page_id, page_num, chap_id) {
+		this.id = page_id;
+		this.number = page_num;
+		this.chapter = chap_id;
 	}
-	//console.log("got a page, adding extra variables");
-	page_obj["identifier"] = identifier;
-	page_obj["number"] = page_list.indexOf(identifier) + 1;
-	//console.log(page_obj);
-	return page_obj;
+
+	async init_page() {
+		try {
+			console.debug(`Attempting to load page ${this.id}`);
+			let response = await fetch(`comic/${this.chapter}/${this.id}/page.json`, {});
+			response = JSON.parse(await response.text());
+			for (const [key, value] of Object.entries(response)) {
+				console.log(`${key}: ${value}`);
+				this[key] = value;
+			}
+			this.fill_empty_translations();
+			this.initialized = true;
+			console.debug(`Successfully loaded page ${this.id}`);
+			console.debug(this);
+		} catch(e) {
+			console.debug(`Failed to load page ${this.id}`);
+			console.error(e);
+		}
+	}
+
+	fill_empty_translations() {
+		if (this.locales.length > 1) {
+				for (let i = 1; i < this.locales.length; i++) {
+					for (const [key, value] of Object.entries(this.locales[i])) {
+						try {
+							if (value == "") {
+								this.locales[i][key] = this.locales[0][key];
+							}
+						} catch(e) {}
+					}
+				}
+			}
+	}
 }
 
-async function get_page_by_number(number) {
-	let page_obj;
-	let identifier;
-	if (number <= window.page_list.length && number > 0) {
-		identifier = window.page_list[number - 1];
-	} else {
-		identifier = window.page_list[-1];
+const comic_db_init_event = new Event("comic_db_initialized");
+document.addEventListener('comic_db_initialized', () => {
+	console.debug('Comic database has been initialized');
+});
+
+const comic_db = new ComicDB();
+async function init_db() {
+	const res = await comic_db.init_database();
+	if (res) {
+		document.dispatchEvent(comic_db_init_event);
+		console.debug(comic_db);
 	}
-	//console.log("attempting to get page: ", identifier);
-	try {
-		page_obj = await fetch(`comic/${identifier}/page.json`);
-		page_obj = await page_obj.json();
-	} catch (e) {
-		console.error(
-			`page ${identifier} does not exist, attempting to load latest page instead`
-		);
-		identifier = page_list[page_list.length - 1];
-		page_obj = await fetch(`comic/${identifier}/page.json`);
-		page_obj = await page_obj.json();
-	}
-	//console.log("got a page, adding extra variables");
-	page_obj["identifier"] = identifier;
-	page_obj["number"] = page_list.indexOf(identifier) + 1;
-	//console.log(page_obj);
-	return page_obj;
 }
+init_db();
+
+// Hijack css animations to find elements as they appear in the DOM
 
 let animation_counter = 0;
 
@@ -138,6 +227,8 @@ function wait_for_element(selector, func) {
 
 	document.addEventListener("animationstart", eventListener, false);
 }
+
+// load in gloomlets as they appear in the DOM
 
 wait_for_element("gloomlet", async (element) => {
 	if (element.getAttribute("name")) {

@@ -1,0 +1,24 @@
+{
+    "thumbnail": "E1p7_t.jpg",
+    "publication_date": "2025-11-03",
+    "additional_credits": "",
+    "comment_image": "",
+
+    "locales": [
+        {
+            "code": "en", 
+            "title": "page 7",
+            "image": "E1p7_en.jpg",
+            "alt_text": "",
+            "comment": ""
+        },
+
+        {
+            "code": "es",
+            "title": "página 7",
+            "image": "E1p7_es.jpg",
+            "alt_text": "",
+            "comment": ""
+        }
+    ]
+}
