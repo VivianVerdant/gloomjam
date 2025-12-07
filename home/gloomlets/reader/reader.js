@@ -34,6 +34,20 @@ class Reader {
 				this._main();
 			});
 		}
+
+		document.addEventListener("keydown", (e) => {
+			if (e .key === "ArrowRight") {
+				e.preventDefault();
+				this.nav_to_next_page();
+			}
+		});
+
+		document.addEventListener("keydown", (e) => {
+			if (e .key === "ArrowLeft") {
+				e.preventDefault();
+				this.nav_to_prev_page();
+			}
+		});
 	}
 
 	async _main() {

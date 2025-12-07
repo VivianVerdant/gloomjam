@@ -1,86 +1,42 @@
 <div class="reader_content">
 	<layout class="content-grid">
 		<div class="above_page">
-			<layout class="flow-row">
+			<layout class="">
 				<div class="comicpage_info_wrapper ninepatch_paper_2 hidden">
 					<span id="chapter_name"></span><br />
 					<span id="page_name"></span>
 				</div>
 				<div class="comicpage_nav comicpage_nav_top">
 					<layout class="flow-row">
-						<a
-							class="nav_button nav_first"
-							onclick="reader.nav_to_first_page()"
-							><img
-								src="/gloomlets/reader/nav_first.png"
-								data-i18n="nav_first"
-								alt="First"
-						/></a>
-						<a
-							class="nav_button nav_prev"
-							onclick="reader.nav_to_prev_page()"
-							><img
-								src="/gloomlets/reader/nav_previous.png"
-								data-i18n="nav_previous"
-								alt="Previous"
-						/></a>
-						<a
-							class="nav_button nav_next"
-							onclick="reader.nav_to_next_page()"
-							><img
-								src="/gloomlets/reader/nav_previous.png"
-								data-i18n="nav_next"
-								alt="Next"
-						/></a>
-						<a
-							class="nav_button nav_last"
-							onclick="reader.nav_to_last_page()"
-							><img
-								src="/gloomlets/reader/nav_first.png"
-								data-i18n="nav_last"
-								alt="Last"
-						/></a>
+						<a class="nav_button nav_first" onclick="reader.nav_to_first_page()"><img
+								src="/gloomlets/reader/nav_first.png" data-i18n="nav_first" alt="First" /></a>
+						<a class="nav_button nav_prev" onclick="reader.nav_to_prev_page()"><img
+								src="/gloomlets/reader/nav_previous.png" data-i18n="nav_previous" alt="Previous" /></a>
+						<a class="nav_button nav_next" onclick="reader.nav_to_next_page()"><img
+								src="/gloomlets/reader/nav_previous.png" data-i18n="nav_next" alt="Next" /></a>
+						<a class="nav_button nav_last" onclick="reader.nav_to_last_page()"><img
+								src="/gloomlets/reader/nav_first.png" data-i18n="nav_last" alt="Last" /></a>
 					</layout>
 				</div>
 				<div class="reader_settings hide_dropdown">
-					<span
-						data-i18n="help_button"
-						class="help_button ninepatch_paper_2"
-						onclick="reader.show_reader_help()"
-						>Help</span
-					>
+					<span data-i18n="help_button" class="help_button ninepatch_paper_2"
+						onclick="reader.show_reader_help()">Help</span>
 					<div class="scale_selector ninepatch_paper_2">
-						<span
-							data-i18n="options_scale"
-							class="toggle"
-							onclick="reader.toggle_scale_popout()"
-							>Settings</span
-						>
+						<span data-i18n="options_scale" class="toggle"
+							onclick="reader.toggle_scale_popout()">Settings</span>
 					</div>
 					<dropdown class="ninepatch_paper_2">
 						<ul>
-							<li
-								data-i18n="options_scale_width"
-								onclick="reader.choose_page_scale('width')"
-							>
+							<li data-i18n="options_scale_width" onclick="reader.choose_page_scale('width')">
 								Width
 							</li>
-							<li
-								data-i18n="options_scale_fit"
-								onclick="reader.choose_page_scale('both')"
-							>
+							<li data-i18n="options_scale_fit" onclick="reader.choose_page_scale('both')">
 								Fit
 							</li>
-							<li
-								data-i18n="options_scale_original"
-								onclick="reader.choose_page_scale('original')"
-							>
+							<li data-i18n="options_scale_original" onclick="reader.choose_page_scale('original')">
 								Original
 							</li>
-							<li
-								data-i18n="options_toggle_colorize"
-								onclick="reader.toggle_page_colorize()"
-							>
+							<li data-i18n="options_toggle_colorize" onclick="reader.toggle_page_colorize()">
 								Colorize
 							</li>
 						</ul>
@@ -89,72 +45,37 @@
 			</layout>
 		</div>
 		<div class="page_container full-width">
-			<div
-				id="comicpage"
-				role="document"
-				class="comicpage fit_both ninepatch_paper"
-			>
-				<img
-					src="/gloomlets/reader/blank_page.png"
-					onclick="reader.on_click_page(event)"
-					tabindex="0"
-					aria-describedby="author_notes_text"
-				/>
-				<img
-					src="/gloomlets/reader/reader_help.png"
-					class="reader_help hidden"
-					tabindex="0"
-					onclick="this.classList.add('hidden')"
-					alt="Help image"
-				/>
+			<layout class="flow-column" style="grid-area: nav_left;">
+				<a class="nav_button nav_prev" onclick="reader.nav_to_prev_page()"><img
+						src="/gloomlets/reader/nav_previous.png" data-i18n="nav_previous" alt="Previous" /></a>
+			</layout>
+			<div id="comicpage" role="document" class="comicpage fit_both ninepatch_paper" style="grid-area: comic;">
+				<img src="/gloomlets/reader/blank_page.png" onclick="reader.on_click_page(event)" tabindex="0"
+					aria-describedby="author_notes_text" />
+				<img src="/gloomlets/reader/reader_help.png" class="reader_help hidden" tabindex="0"
+					onclick="this.classList.add('hidden')" alt="Help image" />
 			</div>
-			<div
-				class="text_description_toggle ninepatch_paper"
-				data-i18n="alt_text"
-			>
-				<div
-					style="z-index: 20"
-					onclick="reader.toggle_text_description()"
-				>
+			<layout class="flow-column" style="grid-area: nav_right;">
+				<a class="nav_button nav_next" onclick="reader.nav_to_next_page()"><img
+						src="/gloomlets/reader/nav_previous.png" data-i18n="nav_next" alt="Next" /></a>
+			</layout>
+			<div class="text_description_toggle ninepatch_paper" data-i18n="alt_text" style="grid-area: alt_text;">
+				<div style="z-index: 20" onclick="reader.toggle_text_description()">
 					ALT
 				</div>
 			</div>
-			<div class="text_description ninepatch_paper"></div>
+			<div class="text_description ninepatch_paper" style="grid-area: alt_text;"></div>
 		</div>
 		<div class="comicpage_nav comicpage_nav_bottom">
 			<layout class="flow-row">
-				<a
-					class="nav_button nav_first"
-					onclick="reader.nav_to_first_page()"
-					><img
-						src="/gloomlets/reader/nav_first.png"
-						data-i18n="nav_first"
-						alt="First"
-				/></a>
-				<a
-					class="nav_button nav_prev"
-					onclick="reader.nav_to_prev_page()"
-					><img
-						src="/gloomlets/reader/nav_previous.png"
-						data-i18n="nav_previous"
-						alt="Previous"
-				/></a>
-				<a
-					class="nav_button nav_next"
-					onclick="reader.nav_to_next_page()"
-					><img
-						src="/gloomlets/reader/nav_previous.png"
-						data-i18n="nav_next"
-						alt="Next"
-				/></a>
-				<a
-					class="nav_button nav_last"
-					onclick="reader.nav_to_last_page()"
-					><img
-						src="/gloomlets/reader/nav_first.png"
-						data-i18n="nav_last"
-						alt="Last"
-				/></a>
+				<a class="nav_button nav_first" onclick="reader.nav_to_first_page()"><img
+						src="/gloomlets/reader/nav_first.png" data-i18n="nav_first" alt="First" /></a>
+				<a class="nav_button nav_prev" onclick="reader.nav_to_prev_page()"><img
+						src="/gloomlets/reader/nav_previous.png" data-i18n="nav_previous" alt="Previous" /></a>
+				<a class="nav_button nav_next" onclick="reader.nav_to_next_page()"><img
+						src="/gloomlets/reader/nav_previous.png" data-i18n="nav_next" alt="Next" /></a>
+				<a class="nav_button nav_last" onclick="reader.nav_to_last_page()"><img
+						src="/gloomlets/reader/nav_first.png" data-i18n="nav_last" alt="Last" /></a>
 			</layout>
 		</div>
 		<div class="author_notes ninepatch_box">

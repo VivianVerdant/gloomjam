@@ -6,7 +6,7 @@
 	],
 	"settings": {
 		"visual-json.outputPrettiness": 4,
-		"liveServer.settings.port": 3000,
+		"liveServer.settings.port": 3001,
 		"liveServer.settings.root": "/home"
 	}
 }

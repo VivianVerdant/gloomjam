@@ -14,11 +14,42 @@ gloomlet[name="reader"] {
 			"comments comments comments";
 	}*/
 
+
+
 	.above_page {
 		/*display: grid;
 		grid-area: above_page;*/
 		justify-content: center;
+
+		&>layout {
+			display: flex;
+			flex-direction: column;
+			height: -webkit-fill-available;
+			width: -moz-available;
+			align-items: center;
+
+			&>* {
+				max-width: 100%;
+			}
+		}
+
+		@media (min-width: 590px) {
+			&>layout {
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				flex-wrap: wrap;
+				width: -webkit-fill-available;
+				width: -moz-available;
+
+				&>* {
+					max-width: 100%;
+				}
+			}
+		}
 	}
+
+
 
 	/*	.page_info_wrapper {
 		display: grid;
@@ -27,12 +58,27 @@ gloomlet[name="reader"] {
 	}*/
 
 	.page_container {
-		display: block;
-		justify-self: center;
-		grid-auto-columns: 1fr;
-		place-items: anchor-center;
-		max-width: min-content;
+		display: grid;
+		place-content: center;
+        grid-template-columns: repeat(3, min-content);
+		gap: 0px 0px;
+		grid-template-areas:
+			"nav_left comic nav_right"
+			". alt_text ."
+			". . .";
+
 		z-index: 0;
+
+		@media (max-width: 700px) {
+			layout {
+				display: none;
+			}
+		}
+
+		layout {
+			flex-wrap: wrap;
+			place-content: center;
+		}
 	}
 
 	.comicpage {
@@ -101,7 +147,7 @@ gloomlet[name="reader"] {
 	.nav_button img {
 		width: 50px;
 	}
-	
+
 	.hide_nav,
 	.nav_button.hide_nav img {
 		opacity: 0;
@@ -143,7 +189,7 @@ gloomlet[name="reader"] {
 		padding-right: 4px;
 	}
 
-	.reader_settings.hide_dropdown > dropdown {
+	.reader_settings.hide_dropdown>dropdown {
 		display: none;
 	}
 
@@ -162,6 +208,7 @@ gloomlet[name="reader"] {
 			margin-block-end: 0;
 		}
 	}
+
 	/*
 	.reader_settings.hide_dropdown > div::after {
 		font-size: 12px;
@@ -253,7 +300,7 @@ gloomlet[name="reader"] {
 		transition: margin-top 0.5s ease-in-out,
 			grid-template-rows 0.5s ease-in-out, margin-bottom 0.5s ease-in-out;
 
-		& > div {
+		&>div {
 			overflow: hidden;
 		}
 	}
