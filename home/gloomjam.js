@@ -24,7 +24,7 @@ window.addEventListener("load", function () {
 		// Reset overflow
 		scroller.style.setProperty("overflow", "");
 		scroller.style.setProperty("overflow-x", "hidden");
-		html.style.setProperty("overflow-x", "hidden");
+		html.style.setProperty("overflow-x", "unset");
 	});
 });
 
