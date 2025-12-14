@@ -93,7 +93,7 @@ a:hover {
 
 .content-grid {
 	--padding-inline: 0rem;
-	--content-max-width: 900px;
+	--content-max-width:800px;
 	--breakout-max-width: 1200px;
 
 	--breakout-size: calc(

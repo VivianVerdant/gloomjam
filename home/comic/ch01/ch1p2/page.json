@@ -1,0 +1,24 @@
+{
+    "thumbnail": "ch1p2_t.jpg",
+    "publication_date": "2025-10-17",
+    "additional_credits": "",
+    "comment_image": "",
+
+    "locales": [
+        {
+            "code": "en", 
+            "title": "page 2",
+            "image": "ch1p2_en.jpg",
+            "alt_text": "",
+            "comment": ""
+        },
+
+        {
+            "code": "es",
+            "title": "página 2",
+            "image": "ch1p2_es.jpg",
+            "alt_text": "",
+            "comment": ""
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "thumbnail": "ch1p13_t.jpg",
+    "publication_date": "2025",
+    "additional_credits": "",
+    "comment_image": "",
+
+    "locales": [
+        {
+            "code": "en", 
+            "title": "page 13",
+            "image": "ch1p13_en.jpg",
+            "alt_text": "",
+            "comment": ""
+        },
+
+        {
+            "code": "es",
+            "title": "página 13",
+            "image": "ch1p13_es.jpg",
+            "alt_text": "",
+            "comment": ""
+        }
+    ]
+}

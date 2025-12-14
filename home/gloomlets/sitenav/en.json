@@ -1,5 +1,7 @@
 {
     "home": "Home",
+    "blog": "Blog",
+    "characters": "Characters",
     "archive": "Archive",
     "about": "About"
 }

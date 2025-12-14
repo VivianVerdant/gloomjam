@@ -1,0 +1,18 @@
+{
+    "publication_date": "2025-12-14",
+    "image": "mayu_chibi.png",
+
+    "locales": [
+        {
+            "code": "en", 
+            "title": "Second Blog Post!",
+            "text": "Hello everyone! <br> I've been waiting for the right time to start publishing this series, but I finally decided on a random date or I would never get myself to start. Life is full of events made to prevent you from starting your webcomic, so one just has to start it. <br> I hope you enjoy this self indulgent story. <br> Special thanks to <a href='https://bsky.app/profile/trashbird.gay'>Rook</a>, who programmed this site's template. It's in test stage, but will soon be releasing a version that everyone can use. <i>-Lumaga</i>"
+        },
+
+        {
+            "code": "es",
+            "title": "",
+            "text": "Hola, todos! <br> He estado esperando por el momento justo para empezar a publicar esta serie, pero finalmente me decidí por un día cualquiera  o no empezaría nunca. La vida está llena de eventos hechos para  prevenir que empieces tu webcomic, así que solo hay que empezarlo. <br> Espero que disfruten de esta historia llena de cosas que me gustan. <br> Muchas gracias a <a href='https://bsky.app/profile/trashbird.gay'>Rook</a>, quien programó este sitio, está en etapa de testeo pero pronto estará disponible para que todos la usen para sus webcomcis."
+        }
+    ]
+}
