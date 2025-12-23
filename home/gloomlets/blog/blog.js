@@ -135,7 +135,7 @@ class Blog {
 	}
 
 	update_language() {
-		//this._main();
+		 this._main();
 	}
 }
 
