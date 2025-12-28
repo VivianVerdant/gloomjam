@@ -12,6 +12,7 @@ class Blog {
 			let response = await fetch("blog/blog.json", {});
 			response = JSON.parse(await response.text());
 			const root = document.querySelector("layout.blog_content");
+			root.innerHTML = "";
 			const posts = response.posts;
 			switch (this.mode) {
 				case "standard":
@@ -26,18 +27,18 @@ class Blog {
 					const container_node = document.createElement("div");
 					container_node.classList.add("latest_post");
 					root.appendChild(container_node);
+					container_node.setAttribute("onclick", "window.location = 'blog.html'")
+					container_node.setAttribute("href", "/blog.html");
 
-					const text_node = document.createElement("h1");
+					const text_node = document.createElement("h3");
 					text_node.classList.add("read_full_post");
 					text_node.setAttribute("data-i18n","read_latest_post")
 					text_node.innerText = "Latest Blog Post:";
 					container_node.appendChild(text_node);
 	
 					const post_element = document.createElement("div");
-					post_element.setAttribute("href", "/blog.html");
-					post_element.classList.add("blog_post","ninepatch_paper");
+					post_element.classList.add("blog_post");
 					post_element.setAttribute("date", posts[0]);
-					post_element.setAttribute("onclick", "window.location = 'blog.html'")
 					container_node.appendChild(post_element);
 					break
 				default:
@@ -45,7 +46,7 @@ class Blog {
 			}
 
 			this.initialized = true;
-			wait_for_element("div.blog_post", (node) => {
+			wait_for_element(".blog_post", (node) => {
 				console.debug(node);
 				this._load_post(node)
 			});
@@ -104,10 +105,10 @@ class Blog {
 
 		if (this.mode == "latest_post") {
 			const heading_node = document.createElement("layout");
-			heading_node.classList.add("flow-column", "post_heading");
+			heading_node.classList.add("flow-row", "post_heading");
 			node.appendChild(heading_node);
 
-			const title_node = document.createElement("h2");
+			const title_node = document.createElement("h4");
 			title_node.classList.add("post_title");
 			title_node.innerHTML = locale.title;
 			heading_node.appendChild(title_node);
@@ -135,7 +136,7 @@ class Blog {
 	}
 
 	update_language() {
-		 this._main();
+		this._main();
 	}
 }
 

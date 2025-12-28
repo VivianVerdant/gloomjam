@@ -1,5 +1,5 @@
 
-gloomlet[name="characters"] {
+gloomlet[name="cast"] {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -40,7 +40,5 @@ gloomlet[name="characters"] {
         margin: -29px 20px;
         max-width: 100%;
         max-height: min-content;
-        -webkit-filter: drop-shadow(2px 2px 2px #0008);
-        filter: drop-shadow(2px 2px 2px #0008);
     }
 }

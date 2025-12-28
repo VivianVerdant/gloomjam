@@ -26,9 +26,18 @@ gloomlet[name="blog"] {
 
 	&[mode="latest_post"] {
 		margin: 0;
+		background-color: var(--accent-color);
+		color: var(--text-link-color);
+		text-decoration: underline;
+		cursor: pointer;
 
-		h1, h2 {
-			margin-bottom: 0;
+		*:hover {
+			opacity: .8;
+			font-size: .9rem;
+		}
+
+		h1, h2, h3, h4 {
+			margin: 0 .3rem;
 		}
 
 		h1 {
@@ -47,15 +56,13 @@ gloomlet[name="blog"] {
 		}
 
 		.blog_post {
-			margin-top: .5rem;
-			padding: .5rem;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			cursor: pointer;
 
 			.post_heading {
-				justify-content: space-between;
+			    align-items: flex-end;
 			}
 
 			img {

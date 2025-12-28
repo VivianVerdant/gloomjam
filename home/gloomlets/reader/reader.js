@@ -36,14 +36,14 @@ class Reader {
 		}
 
 		document.addEventListener("keydown", (e) => {
-			if (e .key === "ArrowRight") {
+			if (e.key === "ArrowRight") {
 				e.preventDefault();
 				this.nav_to_next_page();
 			}
 		});
 
 		document.addEventListener("keydown", (e) => {
-			if (e .key === "ArrowLeft") {
+			if (e.key === "ArrowLeft") {
 				e.preventDefault();
 				this.nav_to_prev_page();
 			}
@@ -78,10 +78,13 @@ class Reader {
 						page_to_load = value;
 						break;
 					case "preferred_scale":
-						this.set_page_scale(value);
+						this.choose_page_scale(value);
 						break;
 					case "colorize_page":
-						if (localStorage.colorize_page == 1) {
+						if (typeof localStorage.colorize_page != "boolean") {
+							localStorage.colorize_page = false;
+						}
+						if (localStorage.colorize_page) {
 							document
 								.querySelector(".page_container")
 								.classList.add("colorize_page");
@@ -90,11 +93,21 @@ class Reader {
 								.querySelector(".page_container")
 								.classList.remove("colorize_page");
 						}
+						document.getElementById("other-options-0").checked = localStorage.colorize_page;
 						break;
 					default:
 						break;
 				}
 			}
+		}
+
+		switch (localStorage.language) {
+			case "es":
+				document.getElementById("language-group-1").checked = true;
+				break
+			default:
+				document.getElementById("language-group-0").checked = true;
+				break
 		}
 
 		const page_obj = await comic_db.get_page_by_number(page_to_load);
@@ -103,6 +116,7 @@ class Reader {
 		// If the current page is wider than the user's window
 		// and they have original size as their preferred,
 		// override it and set to width instead
+		/*
 		if (
 			window.innerWidth <
 			document.querySelector("#comicpage img").getBoundingClientRect()
@@ -110,7 +124,7 @@ class Reader {
 		) {
 			this.set_page_scale("width");
 		}
-
+		*/
 		this.update_url();
 	}
 
@@ -122,7 +136,7 @@ class Reader {
 		for (const script of gloomlet_scripts.values()) {
 			try {
 				script.update_page();
-			} catch (e) {}
+			} catch (e) { }
 		}
 	}
 
@@ -149,7 +163,7 @@ class Reader {
 		const author_notes = document.querySelector(".author_notes .text");
 		author_notes.innerHTML = locale.comment;
 		const comment_image = document.getElementById("comment_image");
-		if ( locale.comment == "" && this.current_page.comment_image == "") {
+		if (locale.comment == "" && this.current_page.comment_image == "") {
 			document.querySelector(".author_notes").classList.add("hidden");
 		} else {
 			document.querySelector(".author_notes").classList.remove("hidden");
@@ -202,6 +216,9 @@ class Reader {
 			document.getElementById("page_name").innerHTML = locale.title;
 			document.querySelector(".comicpage_info_wrapper").classList.remove("hidden");
 		}
+		if (chap.title[`${localStorage.language}`] && locale.title) {
+			document.getElementById("chapter_name").innerText += ", "
+		}
 	}
 
 	show_reader_help() {
@@ -241,25 +258,29 @@ class Reader {
 				page_el.classList.add("fit_height");
 				break;
 			case "both":
+				document.getElementById("view-group-0").checked = true;
 				page_el.classList.remove(...fit_list);
 				page_el.classList.add("fit_both");
 				break;
 			case "original":
+				document.getElementById("view-group-2").checked = true;
 				page_el.classList.remove(...fit_list);
 				page_el.classList.add("fit_original");
 				break;
 			default:
+				document.getElementById("view-group-1").checked = true;
 				page_el.classList.remove(...fit_list);
 				page_el.classList.add("fit_width");
 				break;
 		}
 	}
 
-	toggle_page_colorize() {
-		//console.log("colorize before", localStorage.colorize_page);
-		localStorage.colorize_page ^= true;
-		//console.log("colorize after", localStorage.colorize_page);
-		if (localStorage.colorize_page == 1) {
+	set_page_colorize(value) {
+		console.debug("colorize before", localStorage.colorize_page);
+		console.debug(value);
+		localStorage.colorize_page = value;
+		console.debug("colorize after", localStorage.colorize_page);
+		if (localStorage.colorize_page == "true") {
 			document
 				.querySelector(".page_container")
 				.classList.add("colorize_page");
@@ -395,7 +416,7 @@ class Reader {
 	}
 
 	update_language() {
-		 this._write_page();
+		this._write_page();
 	}
 }
 

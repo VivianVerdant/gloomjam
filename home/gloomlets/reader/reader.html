@@ -2,31 +2,63 @@
 	<layout class="content-grid">
 		<div class="above_page">
 			<layout class="">
-				<div class="comicpage_info_wrapper ninepatch_paper_2 hidden">
-					<span id="chapter_name"></span><br />
-					<span id="page_name"></span>
-				</div>
-				<div class="comicpage_nav comicpage_nav_top">
-					<layout class="flow-row">
-						<a class="nav_button nav_first" onclick="reader.nav_to_first_page()"><img
-								src="/gloomlets/reader/nav_first.png" data-i18n="nav_first" alt="First" /></a>
-						<a class="nav_button nav_prev" onclick="reader.nav_to_prev_page()"><img
-								src="/gloomlets/reader/nav_previous.png" data-i18n="nav_previous" alt="Previous" /></a>
-						<a class="nav_button nav_next" onclick="reader.nav_to_next_page()"><img
-								src="/gloomlets/reader/nav_previous.png" data-i18n="nav_next" alt="Next" /></a>
-						<a class="nav_button nav_last" onclick="reader.nav_to_last_page()"><img
-								src="/gloomlets/reader/nav_first.png" data-i18n="nav_last" alt="Last" /></a>
-					</layout>
-				</div>
 				<div class="reader_settings hide_dropdown">
-					<span data-i18n="help_button" class="help_button ninepatch_paper_2"
-						onclick="reader.show_reader_help()">Help</span>
 					<div class="scale_selector ninepatch_paper_2">
 						<span data-i18n="options_scale" class="toggle"
 							onclick="reader.toggle_scale_popout()">Settings</span>
 					</div>
 					<dropdown class="ninepatch_paper_2">
-						<ul>
+						<div class="rendered-form">
+							<div class="formbuilder-radio-group form-group field-view-group">
+								<label for="view-group" class="formbuilder-radio-group-label">View<span
+										class="tooltip-element"
+										tooltip="How to display the comic on your screen.">?</span></label>
+								<div class="radio-group">
+									<div class="formbuilder-radio" onclick="reader.choose_page_scale('both')">
+										<input name="view-group" access="false" id="view-group-0" value="fit-all"
+											type="radio" checked="checked">
+										<label for="view-group-0">Fit all to screen</label>
+									</div>
+									<div class="formbuilder-radio" onclick="reader.choose_page_scale('width')">
+										<input name="view-group" access="false" id="view-group-1" value="fit-width"
+											type="radio">
+										<label for="view-group-1">Fit width to screen</label>
+									</div>
+									<div class="formbuilder-radio" onclick="reader.choose_page_scale('original')">
+										<input name="view-group" access="false" id="view-group-2" value="original"
+											type="radio">
+										<label for="view-group-2">Original</label>
+									</div>
+								</div>
+							</div>
+							<div class="formbuilder-radio-group form-group field-language-group">
+								<label for="language-group" class="formbuilder-radio-group-label">Language</label>
+								<div class="radio-group">
+									<div class="formbuilder-radio" onclick="gj_i18n.set_language('en')">
+										<input name="language-group" access="false" id="language-group-0" value="en"
+											type="radio" checked="checked">
+										<label for="language-group-0">English</label>
+									</div>
+									<div class="formbuilder-radio" onclick="gj_i18n.set_language('en')">
+										<input name="language-group" access="false" id="language-group-1" value="es"
+											type="radio">
+										<label for="language-group-1">Español</label>
+									</div>
+								</div>
+							</div>
+							<div class="formbuilder-checkbox-group form-group field-other-options">
+								<label for="other-options" class="formbuilder-checkbox-group-label">Color<span
+										class="tooltip-element" tooltip="Recolor black to be colorized">?</span></label>
+								<div class="checkbox-group">
+									<div class="formbuilder-checkbox" onchange="reader.set_page_colorize(document.getElementById('other-options-0').checked)">
+										<input name="other-options[]" access="false" id="other-options-0"
+											value="colorized" type="checkbox" checked="checked">
+										<label for="other-options-0">Colorized</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<ul class="hidden">
 							<li data-i18n="options_scale_width" onclick="reader.choose_page_scale('width')">
 								Width
 							</li>
@@ -42,6 +74,20 @@
 						</ul>
 					</dropdown>
 				</div>
+				<div class="comicpage_nav comicpage_nav_top">
+					<layout class="flow-row">
+						<a class="nav_button nav_first" onclick="reader.nav_to_first_page()"><img
+								src="/gloomlets/reader/nav_first.png" data-i18n="nav_first" alt="First" /></a>
+						<a class="nav_button nav_prev" onclick="reader.nav_to_prev_page()"><img
+								src="/gloomlets/reader/nav_previous.png" data-i18n="nav_previous" alt="Previous" /></a>
+						<a class="nav_button nav_next" onclick="reader.nav_to_next_page()"><img
+								src="/gloomlets/reader/nav_previous.png" data-i18n="nav_next" alt="Next" /></a>
+						<a class="nav_button nav_last" onclick="reader.nav_to_last_page()"><img
+								src="/gloomlets/reader/nav_first.png" data-i18n="nav_last" alt="Last" /></a>
+					</layout>
+				</div>
+				<span data-i18n="help_button" class="help_button ninepatch_paper_2"
+					onclick="reader.show_reader_help()">Help</span>
 			</layout>
 		</div>
 		<div class="page_container full-width">
@@ -79,8 +125,18 @@
 			</layout>
 		</div>
 		<div class="author_notes ninepatch_box">
-			<p class="text"></p>
-			<img id="comment_image" />
+			<layout class="flow-column">
+				<div class="comicpage_info_wrapper hidden">
+					<layout class="flow-row">
+						<span id="chapter_name"></span><br />
+						<span id="page_name"></span>
+					</layout>
+				</div>
+				<layout class="flow-row">
+					<p class="text"></p>
+					<img id="comment_image" />
+				</layout>
+			</layout>
 		</div>
 		<gloomlet name="remark"></gloomlet>
 	</layout>
