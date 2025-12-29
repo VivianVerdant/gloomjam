@@ -51,6 +51,7 @@ class Reader {
 	}
 
 	async _main() {
+		//toggle_scale_popout();
 		// Prioritize URL queries
 		const query = new URLSearchParams(window.location.search);
 		let page_to_load = -1;
@@ -81,19 +82,17 @@ class Reader {
 						this.choose_page_scale(value);
 						break;
 					case "colorize_page":
-						if (typeof localStorage.colorize_page != "boolean") {
-							localStorage.colorize_page = false;
-						}
-						if (localStorage.colorize_page) {
+						if (localStorage.colorize_page == "true") {
+							document.getElementById("other-options-0").checked = true;
 							document
 								.querySelector(".page_container")
 								.classList.add("colorize_page");
 						} else {
+							document.getElementById("other-options-0").checked = false;
 							document
 								.querySelector(".page_container")
 								.classList.remove("colorize_page");
 						}
-						document.getElementById("other-options-0").checked = localStorage.colorize_page;
 						break;
 					default:
 						break;
