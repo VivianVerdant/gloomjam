@@ -21,7 +21,7 @@ IF EXIST "Gloomjam Manager.exe" (
 	GOTO rungm
 ) ELSE (
 	ECHO Downloading Gloomjam Manager
-	curl --output "gm_win.zip" --url https://files.trashbird.gay/seafhttp/f/27bff616919c4ef6b529/?op=view
+	curl -L --output "gm_win.zip" --url https://github.com/VivianVerdant/gloomjam_manager/releases/latest/download/gm_win.zip
 	ECHO Extracting Gloomjam Manager
 	tar -xf "gm_win.zip"
 	GOTO rungm
