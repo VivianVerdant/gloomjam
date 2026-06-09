@@ -1,5 +1,12 @@
 class Reader {
 	current_page;
+	current_chapter;
+	prev_page_id;
+	next_page_id;
+	first_page_id;
+	last_page_id;
+	current_language;
+	current_params = {};
 
 	constructor() {
 		document.addEventListener("click", (event) => {
@@ -27,7 +34,7 @@ class Reader {
 				.classList.add("hide_dropdown");
 		});
 
-		if (comic_db && comic_db.initialized) {
+		if (comic_db && comic_db.initalized) {
 			this._main();
 		} else {
 			document.addEventListener('comic_db_initialized', () => {
@@ -51,32 +58,14 @@ class Reader {
 	}
 
 	async _main() {
-		//toggle_scale_popout();
-		// Prioritize URL queries
-		const query = new URLSearchParams(window.location.search);
-		let page_to_load = -1;
-		if (query.size) {
-			for (const [key, value] of query.entries()) {
-				switch (key) {
-					case "page":
-						page_to_load = value;
-						break;
-					default:
-						query.delete(key);
-						break;
-				}
-			}
-		}
+		let page_id_to_load = -1;
 
 		// Fill in with stored user preferences, if found
 		if (localStorage.length) {
 			for (const [key, value] of Object.entries(localStorage)) {
 				switch (key) {
 					case "latest_read_page":
-						if (query.has("page")) {
-							break;
-						}
-						page_to_load = value;
+						page_id_to_load = value;
 						break;
 					case "preferred_scale":
 						this.choose_page_scale(value);
@@ -94,12 +83,15 @@ class Reader {
 								.classList.remove("colorize_page");
 						}
 						break;
+					case "language":
+						this.current_language = value;
 					default:
 						break;
 				}
 			}
 		}
 
+		/*
 		switch (localStorage.language) {
 			case "es":
 				document.getElementById("language-group-1").checked = true;
@@ -107,10 +99,36 @@ class Reader {
 			default:
 				document.getElementById("language-group-0").checked = true;
 				break
+		}*/
+
+		// overwrite with URL queries
+		const query = new URLSearchParams(window.location.search);
+
+		this.current_params = {};
+		if (query.size) {
+			for (const [key, value] of query.entries()) {
+				switch (key) {
+					case "page":
+						page_id_to_load = value;
+						this.current_params["page"] = value;
+						break;
+					case "lang":
+						this.current_language = value;
+						this.current_params["lang"] = value;
+						break;
+					default:
+						query.delete(key);
+						break;
+				}
+			}
 		}
 
-		const page_obj = await comic_db.get_page_by_number(page_to_load);
-		this.set_current_page(page_obj);
+		localStorage.language = this.current_language;
+
+		this.first_page_id = await comic_db.get_first_page_id();
+		this.last_page_id = await comic_db.get_latest_page_id();
+
+		this.set_current_page(page_id_to_load);
 
 		// If the current page is wider than the user's window
 		// and they have original size as their preferred,
@@ -124,14 +142,28 @@ class Reader {
 			this.set_page_scale("width");
 		}
 		*/
-		this.update_url();
+		// this.update_url();
 	}
 
-	async set_current_page(page_obj) {
+	async set_current_page(page_id) {
+
+		let page_obj = await comic_db.get_page_by_id(page_id);
+		if (!page_obj) {
+			page_obj = await comic_db.get_page_by_id(this.first_page_id);
+		}
 		this.current_page = page_obj;
+		this.current_chapter = await comic_db.get_chapter_by_id(this.current_page.chapter_id);
 		console.debug(page_obj);
-		//window.current_page = page_obj;
+
+		this.update_url();
+		
+		localStorage.latest_read_page = page_obj.id;
+		
+		this.prev_page_id = await comic_db.get_previous_page_id(this.current_page.id);
+		this.next_page_id = await comic_db.get_next_page_id(this.current_page.id);
+		
 		this._write_page();
+
 		for (const script of gloomlet_scripts.values()) {
 			try {
 				script.update_page();
@@ -141,45 +173,34 @@ class Reader {
 
 	//function used to write comic page to web page
 	async _write_page() {
-		// set all locale based data
-		let locale = this.current_page.locales.filter((lang) => lang.code == localStorage.language)[0];
-		console.debug(locale);
-		this.update_image(locale);
-		this.update_alt_text(locale);
-		this.update_page_info(locale);
-		this.update_author_notes(locale);
-		this.update_url();
+		this.current_language = localStorage.language;
+		this.update_image();
+		this.update_alt_text();
+		this.update_page_info();
+		this.update_author_notes();
 		this.update_nav_options();
 	}
 
-	update_image(locale) {
+	update_image() {
 		const image_node = document.querySelector("#comicpage img");
-		const path = `comic/${this.current_page.chapter}/${this.current_page.id}/${locale.image}`;
+		const path = this.current_page.image_filename[this.current_language];
 		image_node.setAttribute("src", path);
 	}
 
-	update_author_notes(locale) {
+	update_author_notes() {
 		const author_notes = document.querySelector(".author_notes .text");
-		author_notes.innerHTML = locale.comment;
-		const comment_image = document.getElementById("comment_image");
-		if (locale.comment == "" && this.current_page.comment_image == "") {
+		author_notes.innerHTML = this.current_page.author_comment[this.current_language];
+		if (author_notes.innerHTML == "") {
 			document.querySelector(".author_notes").classList.add("hidden");
 		} else {
 			document.querySelector(".author_notes").classList.remove("hidden");
 		}
-		if (this.current_page.comment_image != "") {
-			comment_image.src = `comic/${this.current_page.chapter}/${this.current_page.id}/${this.current_page.comment_image}`;
-			comment_image.classList.remove("hidden");
-		} else {
-			comment_image.removeAttribute("src");
-			comment_image.classList.add("hidden");
-		}
 	}
 
-	update_alt_text(locale) {
+	update_alt_text() {
 		try {
-			const text = locale.alt_text;
-			if (text != "") {
+			const text = this.current_page.alt_text;
+			if (text && text.length) {
 				document
 					.querySelector(".text_description")
 					.classList.remove("hidden");
@@ -205,18 +226,17 @@ class Reader {
 		}
 	}
 
-	async update_page_info(locale) {
-		const chap = await comic_db.get_chapter_by_id(this.current_page.chapter);
-		if (chap && localStorage.language) {
-			document.getElementById("chapter_name").innerHTML = chap.title[`${localStorage.language}`] ? chap.title[`${localStorage.language}`] : chap.title["en"];
-			document.querySelector(".comicpage_info_wrapper").classList.remove("hidden");
+	async update_page_info() {
+		if (this.current_chapter.title[this.current_language] != "") {
+			document.getElementById("chapter_name").innerHTML = this.current_chapter.title[this.current_language] + ", ";
+		} else {
+			document.getElementById("chapter_name").innerHTML = lang_db[this.current_language].chapter + ", ";
 		}
-		if (locale.title) {
-			document.getElementById("page_name").innerHTML = locale.title;
-			document.querySelector(".comicpage_info_wrapper").classList.remove("hidden");
-		}
-		if (chap.title[`${localStorage.language}`] && locale.title) {
-			document.getElementById("chapter_name").innerText += ", "
+		
+		if (this.current_page.title[this.current_language] != "") {
+			document.getElementById("page_name").innerHTML = this.current_page.title[this.current_language];
+		} else {
+			document.getElementById("page_name").innerHTML = lang_db[this.current_language].page;
 		}
 	}
 
@@ -332,14 +352,16 @@ class Reader {
 		const nav_prev = Array.from(document.querySelectorAll(".nav_prev"));
 		const nav_next = Array.from(document.querySelectorAll(".nav_next"));
 		const nav_last = Array.from(document.querySelectorAll(".nav_last"));
-		if (this.current_page.number == 1) {
+
+
+		if (!this.prev_page_id) {
 			for (const el of nav_first.concat(nav_prev)) {
 				el.classList.add("hide_nav");
 			}
 			for (const el of nav_last.concat(nav_next)) {
 				el.classList.remove("hide_nav");
 			}
-		} else if (this.current_page.number == comic_db.pages.length) {
+		} else if (!this.next_page_id) {
 			for (const el of nav_first.concat(nav_prev)) {
 				el.classList.remove("hide_nav");
 			}
@@ -370,47 +392,30 @@ class Reader {
 		}
 	}
 
-	async nav_to_page_number(page_num) {
-		if (page_num <= comic_db.pages.length && page_num > 0) {
-			const page_obj = await comic_db.get_page_by_number(page_num);
-			this.set_current_page(page_obj);
-		}
-	}
-
 	nav_to_first_page() {
-		this.nav_to_page_number(1).then(() => {
-			localStorage.latest_read_page = this.current_page.identifier;
-		});
+		this.set_current_page(this.first_page_id);
 	}
 
 	nav_to_prev_page() {
-		if (this.current_page.number == 1) {
-			return;
-		}
-		this.nav_to_page_number(this.current_page.number - 1).then(() => {
-			localStorage.latest_read_page = this.current_page.identifier;
-		});
+		this.set_current_page(this.prev_page_id);
 	}
 
 	nav_to_next_page() {
-		if (this.current_page.number == comic_db.pages.length) {
-			return;
-		}
-		this.nav_to_page_number(this.current_page.number + 1).then(() => {
-			localStorage.latest_read_page = this.current_page.identifier;
-		});
+		this.set_current_page(this.next_page_id);
 	}
 
 	nav_to_last_page() {
-		this.nav_to_page_number(comic_db.pages.length).then(() => {
-			//console.log("foo");
-			localStorage.latest_read_page = this.current_page.identifier;
-		});
+		this.set_current_page(this.last_page_id);
 	}
 
 	update_url() {
+		this.current_params["page"] = this.current_page.id;
 		const new_url = new URL(window.location.origin);
-		new_url.searchParams.set("page", this.current_page.number);
+		for (const key in this.current_params) {
+			new_url.searchParams.set(key, this.current_params[key]);
+		}
+		// new_url.searchParams.set("page", this.current_page.id);
+
 		window.history.pushState(null, "", new_url.toString());
 	}
 

@@ -31,25 +31,29 @@ window.addEventListener("load", function () {
 // Classes for loading in comic data
 
 class ComicDB {
+	id = "";
+	page_type = "paginated";
+	languages = ["en"];
 	chapters = [];
-	pages = [];
-	initialized = false;
+	initalized = false;
 	
 	constructor() {
 	}
 	
 	async init_database() {
 		try {
-			let response = await fetch("comic/chapters.json", {});
+			let response = await fetch("db.json", {});
 			response = JSON.parse(await response.text());
-			const chapters = response.chapters;
-			for (const chap_id of chapters) {
-				const chap = new Chapter(chap_id);
-				await chap.init_chapter(this.pages);
+			this.id = response.id;
+			this.page_type = response.page_type;
+			this.languages = response.languages;
+
+			for (let ci = 0; ci < response.chapters.length; ci++) {
+				const chap = new Chapter(response.chapters[ci]);
+				chap["chapter_num"] = ci + 1;
 				this.chapters.push(chap);
-				this.pages = this.pages.concat(chap.pages);
 			}
-			this.initialized = true;
+
 			console.debug("Database loaded successfully");
 			return true;
 		} catch (e) {
@@ -58,123 +62,119 @@ class ComicDB {
 			return false;
 		}
 	}
+
+	async get_previous_page_id(page_id) {
+		for (let i = 0; i <= this.chapters.length; i++) {
+			let index = this.chapters[i].pages.findIndex((pg) => {
+				return pg.id == page_id;
+			});
+			if (index == -1) {
+				continue 
+			}
+			if (index == 0) {
+				if (i == 0) {
+					return false
+				} else {
+					let len = this.chapters[i -1].pages.length
+					return this.chapters[i - 1].pages[len - 1]
+				}
+			} else {
+				return  this.chapters[i].pages[index - 1].id
+			}
+		}
+	}
+
+	async get_next_page_id(page_id) {
+		for (let i = 0; i <= this.chapters.length; i++) {
+			let index = this.chapters[i].pages.findIndex((pg) => {
+				return pg.id == page_id;
+			});
+			if (index == -1) {
+				continue 
+			}
+			if (index == (this.chapters[i].pages.length - 1)) {
+				if (i == (this.chapters.length - 1)) {
+					return false
+				} else {
+					return this.chapters[i + 1].pages[0]
+				}
+			} else {
+				return  this.chapters[i].pages[index + 1].id
+			}
+		}
+	}
 	
-	async get_page_by_number(page_num) {
-		let page = this.pages[this.pages.length - 1];
-		if (page_num > 0 && page_num <= this.pages.length) {
-			page = this.pages[page_num - 1]
-		}
-		if (!page.initialized) {
-			await page.init_page();
-		}
-		return page
+	async get_first_page_id() {
+		return this.chapters[0].pages[0].id;
+	}
+	
+	async get_latest_page_id() {
+		let ch = this.chapters.length - 1;
+		let pg = this.chapters[ch].pages.length - 1;
+		return this.chapters[ch].pages[pg].id
 	}
 	
 	async get_page_by_id(page_id) {
-		let page = this.pages[this.pages.length - 1];
-		for (const pg of this.pages) {
-			if (pg.id == page_id) {
-				page = pg;
-			}
+		if (page_id == -1) {
+			return false
 		}
-		if (!page.initialized) {
-			await page.init_page();
-		}
-		return page
-	}
-
-	async get_chapter_by_id(ch_id){
-		let chap = false;
 		for (const ch of this.chapters) {
-			if (ch.id == ch_id) {
-				chap = ch;
+			for (const pg of ch.pages) {
+				if (pg.id == page_id) {
+					return pg
+				}
 			}
 		}
-		return chap
+		return false
 	}
 
+	async get_chapter_by_id(chap_id) {
+		for (const ch of this.chapters) {
+			if (ch.id == chap_id) {
+				return ch
+			}
+		}
+		return false
+	}
 }
 
 class Chapter {
 	id;
 	title;
 	pages = [];
-	page_range = [];
-	length;
 	
-	constructor(chap_id) {
-		this.id = chap_id;
-	}
-	
-	async init_chapter(db_pages) {
-		try {
-			console.debug(`Attempting to load chapter ${this.id}`);
-			let response = await fetch(`comic/${this.id}/chapter.json`, {});
-			response = JSON.parse(await response.text());
-			this.title = response.title;
-			this.page_range[0] = db_pages.length + 1;
-			this.page_range[1] = this.page_range[0];
-			for (const page_id of response.pages) {
-				const pg = new Page(page_id, this.page_range[1], this.id);
-				this.page_range[1] += 1;
-				this.pages.push(pg);
-			}
-			this.page_range[1] -= 1;
-			this.length = this.page_range[1] - this.page_range[0] + 1;
-			console.debug(`Successfully loaded chapter ${this.id}`);
-			return true;
-		} catch (e) {
-			console.debug(`Failed to load chapter ${this.id}`);
-			console.error(e);
-			return false;
+	constructor(dict) {
+		this.id = dict.id;
+		this.title = dict.title;
+
+		for (let pi = 0; pi < dict.pages.length; pi++) {
+			let page = new Page(dict.pages[pi])
+			page["chapter_id"] = this.id;
+			page["page_num"] = pi + 1;
+			this.pages.push(page);
 		}
 	}
 }
 
 class Page {
 	id;
-	chapter;
-	number;
-	languages;
-	initialized = false;
+	title;
+	thumbnail;
+	pubDate;
+	page_type;
+	page_length;
+	image_filename;
+	author_comment;
 	
-	constructor(page_id, page_num, chap_id) {
-		this.id = page_id;
-		this.number = page_num;
-		this.chapter = chap_id;
-	}
-
-	async init_page() {
-		try {
-			console.debug(`Attempting to load page ${this.id}`);
-			let response = await fetch(`comic/${this.chapter}/${this.id}/page.json`, {});
-			response = JSON.parse(await response.text());
-			for (const [key, value] of Object.entries(response)) {
-				console.log(`${key}: ${value}`);
-				this[key] = value;
-			}
-			this.fill_empty_translations();
-			this.initialized = true;
-			console.debug(`Successfully loaded page ${this.id}`);
-			console.debug(this);
-		} catch(e) {
-			console.debug(`Failed to load page ${this.id}`);
-			console.error(e);
-		}
-	}
-
-	fill_empty_translations() {
-		if (this.locales.length > 1) {
-				for (let i = 1; i < this.locales.length; i++) {
-					for (const [key, value] of Object.entries(this.locales[i])) {
-						try {
-							if (value == "") {
-								this.locales[i][key] = this.locales[0][key];
-							}
-						} catch(e) {}
-					}
-				}
-			}
+	constructor(dict) {
+		this.id = dict.id;
+		this.title = dict.title;
+		this.thumbnail = dict.thumbnail;
+		this.pubDate = dict.pubDate;
+		this.page_type = dict.page_type;
+		this.page_length = dict.page_length;
+		this.image_filename = dict.image_filename;
+		this.author_comment = dict.author_comment;
 	}
 }
 
@@ -187,6 +187,7 @@ const comic_db = new ComicDB();
 async function init_db() {
 	const res = await comic_db.init_database();
 	if (res) {
+		comic_db.initalized = true;
 		document.dispatchEvent(comic_db_init_event);
 		console.debug(comic_db);
 	}
@@ -236,6 +237,7 @@ wait_for_element("gloomlet", async (element) => {
 		//console.log("loading content for gloomlet", name, "at", element);
 		gloomlet_names.push(name);
 		const js = async () => {
+			await gj_i18n.load_gloomlet(name);
 			var script = document.createElement("script");
 			script.src = `gloomlets/${name}/${name}.js`;
 			document.body.appendChild(script);
@@ -248,7 +250,6 @@ wait_for_element("gloomlet", async (element) => {
 					element.innerHTML = text;
 					//console.log("loaded HTML for: ", name);
 					js();
-					gj_i18n.load_gloomlet(name);
 				});
 		};
 		const css = async () => {

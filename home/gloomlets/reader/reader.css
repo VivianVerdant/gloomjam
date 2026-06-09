@@ -329,7 +329,7 @@ gloomlet[name="reader"] {
 		}
 
 		img {
-			height: 200px;
+			/* height: 200px; */
 			width: auto;
 			float: inline-end;
 		}

@@ -1,4 +1,6 @@
 {
-    "expand_collapse_all": "Expand/Collapse All",
-    "archive": "Archivo"
+    "expand_collapse_all": "Expandir/Colapsar Todos",
+    "archive": "Archivo",
+    "page": "Página",
+    "Chapter": "Capítulo"
 }

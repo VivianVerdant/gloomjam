@@ -9,7 +9,7 @@ class Archive {
 			}
 		});
 
-		if (comic_db && comic_db.initialized) {
+		if (comic_db && comic_db.initalized) {
 			this._main();
 		} else {
 			document.addEventListener('comic_db_initialized', () => {
@@ -25,26 +25,30 @@ class Archive {
 	async _main() {
 		let archive_html = "";
 		for (const chapter of comic_db.chapters) {
-			const title = chapter.title[`${localStorage.language}`];
-			const pages = chapter.pages;
+			let ch_title = chapter.title[localStorage.language];
+			if (!ch_title || ch_title.length == 0) {
+				ch_title = lang_db[localStorage.language].chapter + " " + chapter.chapter_num;
+			}
 			let pages_html = "";
-			for (const page of pages) {
-				const page_obj = await comic_db.get_page_by_number(page.number);
-				let locale = page_obj.locales.filter((lang) => lang.code == localStorage.language)[0];
-				let html = `<a class="page" href="/?page=${page_obj.number}">
+			for (const page of chapter.pages) {
+				let pg_title = page.title[localStorage.language];
+					if (!pg_title || pg_title.length == 0) {
+						pg_title = lang_db[localStorage.language].page + " " + page.page_num;
+					}
+				let html = `<a class="page" href="/?page=${page.id}">
 					<div>
-						<img src="/comic/${chapter.id}/${page.id}/${page_obj.thumbnail}" class="thumbnail" />
+						<img src="${page.thumbnail}" class="thumbnail" />
 					</div>
 					<div class="page_info">
-					<h3>${locale.title}</h3>
-					<!--- <span>${page_obj.publication_date}</span> --->
+					<h3>${pg_title}</h3>
+					<!--- <span>${page.pubDate}</span> --->
 					</div>
 				</a>
 				`;
 				pages_html = pages_html.concat(html);
 			}
 			let chapter_html = `<div class="chapter expandable open">
-			<h2 class="ninepatch_title">${title}</h2>
+			<h2 class="ninepatch_title">${ch_title}</h2>
 			<div class="page_collapse ninepatch_paper_2">
 			<div class="page_list">
 			${pages_html}

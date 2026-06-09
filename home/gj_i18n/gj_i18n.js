@@ -41,16 +41,19 @@ class Gj_i18n {
 				return;
 			}
 			try {
+				const lang = localStorage.language;
 				if (element.tagName == "IMG") {
-					element.alt = lang_db[localStorage.language][key];
-					element.title = lang_db[localStorage.language][key];
+					element.alt = lang_db[lang][key];
+					element.title = lang_db[lang][key];
 				} else if (
 					element.tagName == "INPUT" &&
 					element.type == "submit"
 				) {
-					element.value = lang_db[localStorage.language][key];
+					element.value = lang_db[lang][key];
+				} else if (element.tagName == "SPAN" && element.hasAttribute("tooltip")) {
+					element.setAttribute("tooltip", lang_db[lang][key]);
 				} else {
-					element.innerHTML = lang_db[localStorage.language][key];
+					element.innerHTML = lang_db[lang][key];
 				}
 			} catch (e) {
 				//console.log(`No translation found for ${key}`);

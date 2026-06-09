@@ -32,8 +32,8 @@ class Blog {
 
 					const text_node = document.createElement("h3");
 					text_node.classList.add("read_full_post");
-					text_node.setAttribute("data-i18n","read_latest_post")
-					text_node.innerText = "Latest Blog Post:";
+					text_node.setAttribute("data-i18n","latest_blog_post")
+					text_node.innerText = lang_db[localStorage.language].latest_blog_post;
 					container_node.appendChild(text_node);
 	
 					const post_element = document.createElement("div");

@@ -1,12 +1,18 @@
 {
-    "nav_first": "First",
-    "nav_previous": "Previous",
-    "nav_next": "Next",
-    "nav_last": "Last",
-    "help_button": "Help",
-    "options_scale": "Settings",
-    "options_scale_fit": "Contener",
-    "options_scale_original": "Original",
-    "options_scale_width": "Ancho",
-    "options_toggle_colorize": "Colorize"
+    "nav_first": "Primero",
+    "nav_previous": "Anterior",
+    "nav_next": "Siguiente",
+    "nav_last": "Último",
+    "help_button": "Ayuda",
+    "options_label": "Ajustes",
+    "options_view_label": "View",
+    "options_view_tooltip": "How to display the comic on your screen.",
+    "options_scale_fit": "Fit all to screen",
+    "options_scale_original": "Original Size",
+    "options_scale_width": "Fit width to screen",
+    "options_colorize_label": "Color",
+    "options_colorize_tooltip": "Changes black to be colorized.",
+    "options_toggle_colorize": "Coloreado",
+    "page": "Página",
+    "Chapter": "Capítulo"
 }

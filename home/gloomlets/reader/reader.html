@@ -4,34 +4,36 @@
 			<layout class="">
 				<div class="reader_settings hide_dropdown">
 					<div class="scale_selector ninepatch_paper_2">
-						<span data-i18n="options_scale" class="toggle"
+						<span data-i18n="options_label" class="toggle"
 							onclick="reader.toggle_scale_popout()">Settings</span>
 					</div>
 					<dropdown class="ninepatch_paper_2">
 						<div class="rendered-form">
 							<div class="formbuilder-radio-group form-group field-view-group">
-								<label for="view-group" class="formbuilder-radio-group-label">View<span
+								<label for="view-group" data-i18n="options_view_label" class="formbuilder-radio-group-label">View</label>
+								<span
 										class="tooltip-element"
-										tooltip="How to display the comic on your screen.">?</span></label>
+										data-i18n="options_view_tooltip"
+										tooltip="How to display the comic on your screen.">?</span>
 								<div class="radio-group">
 									<div class="formbuilder-radio" onclick="reader.choose_page_scale('both')">
 										<input name="view-group" access="false" id="view-group-0" value="fit-all"
 											type="radio" checked="checked">
-										<label for="view-group-0">Fit all to screen</label>
+										<label for="view-group-0" data-i18n="options_scale_fit">Fit all to screen</label>
 									</div>
 									<div class="formbuilder-radio" onclick="reader.choose_page_scale('width')">
 										<input name="view-group" access="false" id="view-group-1" value="fit-width"
 											type="radio">
-										<label for="view-group-1">Fit width to screen</label>
+										<label for="view-group-1" data-i18n="options_scale_width">Fit width to screen</label>
 									</div>
 									<div class="formbuilder-radio" onclick="reader.choose_page_scale('original')">
 										<input name="view-group" access="false" id="view-group-2" value="original"
 											type="radio">
-										<label for="view-group-2">Original</label>
+										<label for="view-group-2" data-i18n="options_scale_original">Original Size</label>
 									</div>
 								</div>
 							</div>
-							<div class="formbuilder-radio-group form-group field-language-group">
+							<!-- <div class="formbuilder-radio-group form-group field-language-group">
 								<label for="language-group" class="formbuilder-radio-group-label">Language</label>
 								<div class="radio-group">
 									<div class="formbuilder-radio" onclick="gj_i18n.set_language('en')">
@@ -45,15 +47,18 @@
 										<label for="language-group-1">Español</label>
 									</div>
 								</div>
-							</div>
+							</div> -->
 							<div class="formbuilder-checkbox-group form-group field-other-options">
-								<label for="other-options" class="formbuilder-checkbox-group-label">Color<span
-										class="tooltip-element" tooltip="Recolor black to be colorized">?</span></label>
+								<label for="other-options" data-i18n="options_colorize_label" class="formbuilder-checkbox-group-label">Color</label>
+								<span
+										class="tooltip-element" 
+										data-i18n="options_colorize_tooltip"
+										tooltip="Changes black to be colorized">?</span>
 								<div class="checkbox-group">
 									<div class="formbuilder-checkbox" onchange="reader.set_page_colorize(document.getElementById('other-options-0').checked)">
 										<input name="other-options[]" access="false" id="other-options-0"
 											value="colorized" type="checkbox" checked="checked">
-										<label for="other-options-0">Colorized</label>
+										<label for="other-options-0" data-i18n="options_toggle_colorize">Colorized</label>
 									</div>
 								</div>
 							</div>
