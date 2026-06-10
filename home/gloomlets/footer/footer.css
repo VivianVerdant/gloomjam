@@ -35,6 +35,14 @@ gloomlet[name="footer"] {
 		}
 	}
 
+	.rss_subscribe {
+		img {
+			height: 3rem;
+            width: -webkit-fill-available;
+		}
+	}
+
+	.rss_subscribe,
 	.links,
 	.newsletter {
 		padding: 0 40px;
