@@ -31,28 +31,27 @@ gloomlet[name="blog"] {
 		text-decoration: underline;
 		cursor: pointer;
 
-		*:hover {
-			opacity: .8;
-			font-size: .9rem;
-		}
-
 		h1, h2, h3, h4 {
 			margin: 0 .3rem;
 		}
-
+		
 		h1 {
 			margin-right: 1rem;
 		}
-
+		
 		p {
 			margin: 0;
 			font-size: .8rem;
 		}
-
+		
 		.latest_post {
 			display: flex;
 			align-items: center;
     		justify-content: center;
+		}
+		
+		.latest_post:hover {
+			opacity: .7;
 		}
 
 		.blog_post {

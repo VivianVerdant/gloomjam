@@ -236,7 +236,7 @@ class Reader {
 		if (this.current_page.title[this.current_language] != "") {
 			document.getElementById("page_name").innerHTML = this.current_page.title[this.current_language];
 		} else {
-			document.getElementById("page_name").innerHTML = lang_db[this.current_language].page;
+			document.getElementById("page_name").innerHTML = lang_db[this.current_language].page + " " + this.current_page.page_num;
 		}
 	}
 

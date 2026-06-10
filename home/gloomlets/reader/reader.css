@@ -112,8 +112,9 @@ gloomlet[name="reader"] {
 			justify-content: flex-start;
 		}
 
-		span {
+		span,h1,h2,h3,h4 {
 			padding: 0 .15rem;
+			margin-bottom: 0;
 		}
 	}
 
@@ -318,6 +319,7 @@ gloomlet[name="reader"] {
 		max-width: 800px;
 		margin-top: .5rem;
 		margin-bottom: 1.5rem;
+		padding: 0 .5rem;
 
 		.flow-row {
 			flex-wrap: nowrap
