@@ -1,7 +1,3 @@
-Gloomjam Manager.console.exe
-Gloomjam Manager.exe
-busybox.exe
+*.exe
+*.zip
 settings.ini
-gm_win.zip
-
-home/comic

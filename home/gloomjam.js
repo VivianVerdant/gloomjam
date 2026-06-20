@@ -125,6 +125,16 @@ class ComicDB {
 				}
 			}
 		}
+		let all_pages = [];
+		if (page_id.match(/^[0-9]+$/) != null) {
+			const page_num = Number(page_id);
+			for (const ch of this.chapters) {
+				all_pages = all_pages.concat(ch.pages)
+			}
+			if (all_pages.length >= page_num) {
+				return all_pages[page_num - 1];
+			}
+		}
 		return false
 	}
 
